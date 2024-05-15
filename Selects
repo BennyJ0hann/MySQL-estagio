@@ -1,0 +1,71 @@
+
+#alunos que nasceram depois do ano 2000
+CREATE view aluno2000 as
+SELECT 
+	a.nome_aluno, 
+	a.dt_nascimento 
+from estagiario_homol.aluno a 
+WHERE dt_nascimento > '2000-01-01';
+
+SELECT * from estagiario_homol.aluno2000;
+
+#criando nome do campus apartir da concatenação
+CREATE view nomeCampus as
+SELECT 
+ 	CONCAT(RIGHT(TRIM(c.cidade),2),c.id)nome_campus,
+ 	c.cidade,
+	c2.nome_curso 
+FROM estagiario_homol.campus c 
+left join estagiario_homol.curso c2 on c.id_curso = c2.id 
+WHERE UPPER(c2.nome_curso) = 'JOGADOR DE FUTEBOL';
+
+SELECT * FROM estagiario_homol.nomeCampus;
+
+
+#quantos cursos de jogador de futebol existem em cada cidade
+CREATE view Qtde_cursoJFPorCidade as
+SELECT 	
+	c.cidade,
+	count(c2.nome_curso) as numero_de_cursos
+FROM estagiario_homol.campus c
+left join estagiario_homol.curso c2 on c.id_curso = c2.id
+WHERE c2.id = 4
+group by c.cidade;
+
+SELECT * FROM estagiario_homol.Qtde_cursoJFPorCidade;
+
+
+#quantos cursos de jogador de futebol existem no Brasil
+
+create view Qtde_cursoJFBrasil as
+SELECT 
+'Brasil',
+SUM(numero_de_cursos) as soma_cursos
+from(
+SELECT 	
+	c.cidade,
+	count(c2.nome_curso) as numero_de_cursos
+FROM estagiario_homol.campus c 
+left join estagiario_homol.curso c2 on c.id_curso = c2.id 
+WHERE c2.id = 4
+group by c.cidade
+)as curso_cidades
+group by 1;
+
+SELECT * FROM estagiario_homol.Qtde_cursoJFBrasil;
+
+
+#quais cidades posuem o curso de jogador de futebol inferior a 5
+SELECT 	
+	c.cidade,
+	count(c2.nome_curso) as numero_de_cursos
+FROM estagiario_homol.campus c 
+left join estagiario_homol.curso c2 on c.id_curso = c2.id 
+WHERE c2.id = 4
+group by c.cidade
+HAVING numero_de_cursos < 5;
+
+
+
+
+
