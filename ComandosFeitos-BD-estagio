@@ -1,0 +1,480 @@
+#criando tabelas
+
+CREATE table curso(
+id int(4) auto_increment,
+nome_curso varchar(30) NOT null,
+primary key (id)
+);
+
+create table professor(
+id int(4) auto_increment,
+nome_professor varchar(30) not null,
+primary key (id)
+);
+
+create table aluno(
+id int(4) auto_increment,
+nome_aluno varchar(30) not null,
+dt_nascimento date not null,
+sexo varchar(1) not null,
+primary key (id)
+);
+
+create table aluno_list_turma(
+id int(4) auto_increment,
+id_aluno int(4) not null,
+id_turma int(4) not null,
+primary key (id),
+foreign key (id_aluno) references aluno(id),
+foreign key (id_turma) references turma(id)
+);
+
+CREATE table materia(
+id int(4) auto_increment,
+nome_materia varchar(30) not null,
+id_professor int(4),
+primary key (id),
+foreign key (id_professor) references professor(id) 
+);
+
+CREATE table lista_materia_curso(
+id int(4) auto_increment,
+id_materia int(4),
+id_curso int(4),
+primary key (id),
+foreign key (id_materia) references materia(id),
+foreign key (id_curso) references curso(id)
+);
+
+create table turma(
+id int(4) auto_increment,
+curso_id int(4) not null,
+nome_professor varchar(30) not null,
+foreign key(curso_id) references curso(id),
+primary key (id)
+);
+
+
+
+#Inserindo valores - aluno
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Batman', '1972-02-19', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Pernalonga', '1940-07-27', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Vitor Hugo Leiro do Galo', '1983-01-21', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Zelda', '1986-02-21', 'F');
+###############
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Bob Esponja', '1999-02-01', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Homer Simpson', '1989-02-02', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Pato Donald', '1934-02-03', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Scooby-Doo', '1969-02-04', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Patolino', '1937-02-05', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Pica-Pau', '1940-02-06', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Eric Cartman', '1997-02-07', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Pantera Cor-de-Rosa', '1963-02-08', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Goku', '1984-02-09', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Lion-O', '1985-02-10', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Naruto', '1997-02-11', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Morty', '2013-02-12', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Coragem (O Cão Covarde)', '2002-02-13', 'M');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Lola Bunny', '1996-02-14', 'F');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Lilo', '2002-02-15', 'F');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Ariel', '2013-02-16', 'F');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Mulan', '1998-02-17', 'F');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Kim Possible', '2002-02-18', 'F');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('April ONeil', '1984-02-19', 'F');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('She-Ra', '1985-02-20', 'F');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Raven', '2003-02-21', 'F');
+
+insert into aluno (nome_aluno, dt_nascimento, sexo) 
+values ('Gwen Tennyson', '2005-02-22', 'F');
+
+
+#Inserindo valores - professores
+insert into professor (nome_professor)
+values('Seu Madruga');
+
+insert into professor (nome_professor)
+values('Kakashi');
+
+insert into professor (nome_professor)
+values('Lara Croft');
+
+insert into professor (nome_professor)
+values('Michael Jackson');
+
+insert into professor (nome_professor)
+values('Mestre Yoda');
+
+insert into professor (nome_professor)
+values('Mestre Splinter');
+
+insert into professor (nome_professor)
+values('Professor Utonium');
+
+insert into professor (nome_professor)
+values('Vovó Juju');
+
+insert into professor (nome_professor)
+values('Indiana Jones');
+
+insert into professor (nome_professor)
+values('Albus Dumbledore');
+
+
+
+
+#Inserindo valores - cursos
+insert into curso (nome_curso)
+values('Produção de Cachaça');
+
+insert into curso (nome_curso)
+values('Administração');
+
+insert into curso (nome_curso)
+values('Jogador de Futebol');
+
+insert into curso (nome_curso)
+values('TikToker');
+
+insert into curso (nome_curso)
+values('Mecânico de Uber');
+
+
+
+
+
+#Inserindo valores - turma
+insert into turma (nome_turma, curso_id)
+values ('1A', 1);#já
+
+insert into turma (nome_turma, curso_id)
+values ('1B', 1);
+
+insert into turma (nome_turma, curso_id)
+values ('1C', 1);
+
+insert into turma (nome_turma, curso_id)
+values ('2A', 2);
+
+insert into turma (nome_turma, curso_id)
+values ('2B', 1);#já
+
+insert into turma (nome_turma, curso_id)
+values ('2C', 2);
+
+insert into turma (nome_turma, curso_id)
+values ('3A', 4);
+
+insert into turma (nome_turma, curso_id)
+values ('3B', 4);
+
+insert into turma (nome_turma, curso_id)
+values ('3C', 1);#já
+
+insert into turma (nome_turma, curso_id)
+values ('4A', 5);
+
+insert into turma (nome_turma, curso_id)
+values ('4B', 5);
+
+insert into turma (nome_turma, curso_id)
+values ('4C', 5);
+
+insert into turma (nome_turma, curso_id)
+values ('5A', 6);
+
+insert into turma (nome_turma, curso_id)
+values ('5B', 6);
+
+insert into turma (nome_turma, curso_id)
+values ('5C', 6);
+
+
+
+#delete
+DELETE from estagiario_homol.aluno
+WHERE id = 2 and nome_aluno = 'Batman';
+
+DELETE from estagiario_homol.curso
+WHERE id = 3 and nome_curso = 'Jogador de Futebol';
+
+
+#alterando tabela
+ALTER table turma drop column nome_professor;
+
+
+#add coluna na tabela
+alter table turma add nome_turma varchar(2);
+
+
+
+#selects
+SELECT 
+	a.id,
+	a.nome_aluno,
+	a.dt_nascimento,
+	a.sexo
+from estagiario_homol.aluno a;
+
+SELECT
+	p.id,
+	p.nome_professor 
+from estagiario_homol.professor p;
+
+SELECT 
+	c.id,
+	c.nome_curso
+from estagiario_homol.curso c;
+
+SELECT 
+	t.id,
+	t.nome_turma,
+	t.curso_id
+from estagiario_homol.turma t; 
+
+
+
+#count
+select
+	count(a.id)
+from estagiario_homol.aluno a;
+
+select
+	count(c.id)
+from estagiario_homol.curso c;
+
+select
+	count(p.id)
+from estagiario_homol.professor p;
+
+select
+	count(t.id)
+from estagiario_homol.turma t;
+
+
+#Order by 
+select 
+	a.id,
+	a.nome_aluno,
+	a.dt_nascimento,
+	a.sexo
+from estagiario_homol.aluno a
+order by a.dt_nascimento desc;
+
+select 
+	p.id,
+	p.nome_professor
+from estagiario_homol.professor p
+order by p.nome_professor;
+
+#join
+select 
+	a.id,
+	a.nome_turma,
+	b.nome_curso 
+FROM estagiario_homol.turma a
+LEFT JOIN estagiario_homol.curso b ON a.curso_id = b.id;
+
+
+#Min and Max
+SELECT
+	min(a.dt_nascimento)
+from estagiario_homol.aluno a;
+
+SELECT
+	max(a.dt_nascimento)
+from estagiario_homol.aluno a;
+
+
+#group by
+SELECT COUNT(dt_nascimento), nome_aluno from estagiario_homol.aluno
+group by nome_aluno;
+
+
+#update
+SELECT
+	a.id,
+	a.nome_aluno 
+from estagiario_homol.aluno a 
+where a.id = 1;
+
+UPDATE
+	estagiario_homol.aluno a
+set a.nome_aluno = 'Batman (update)'
+where a.id = 1;
+
+-
+SELECT
+	a.id,
+	a.nome_aluno 
+from estagiario_homol.aluno a 
+where a.id = 1;
+
+UPDATE estagiario_homol.aluno a
+	set a.nome_aluno = 'Pernalonga (update)'
+where a.id = 3;
+
+
+select 
+	a.id,
+	a.curso_id, 
+	a.nome_turma  
+FROM estagiario_homol.turma a
+where a.id = 3;
+
+UPDATE estagiario_homol.turma 	
+SET curso_id = 4
+where id = 3;
+
+
+select 
+	a.id,
+	a.curso_id, 
+	a.nome_turma  
+FROM estagiario_homol.turma a
+where a.id = 2;
+
+UPDATE estagiario_homol.turma
+SET curso_id = 2
+where id = 2;
+
+
+
+ALTER TABLE aluno
+ADD COlumn id_email varchar(30),
+ADD CONSTRAINT fk_id_email FOREIGN KEY (id_email) REFERENCES email(id);
+
+rename table materia to disciplina;
+
+ALTER table disciplina
+change nome_materia nome_disciplina varchar(30);
+
+alter table disciplina 
+add column horas int(4);
+
+alter table disciplina 
+drop column id_professor,
+drop constraint disciplina_ibfk_1;
+
+alter table turma 
+drop column curso_id,
+drop constraint turma_ibfk_1;
+
+CREATE table grauProfessor(
+id int(4) auto_increment,
+graduacao varchar(30),
+primary key (id)
+);
+
+ALTER TABLE professor
+ADD column id_email int,
+add column id_telefone int,
+add column id_grauP int,
+add column cpf varchar(30),
+add column dt_nascimento date,
+ADD CONSTRAINT fk_id_email2 FOREIGN KEY (id_email) REFERENCES email(id),
+ADD CONSTRAINT fk_id_telefone2 FOREIGN KEY (id_telefone) REFERENCES telefone(id),
+ADD CONSTRAINT fk_id_grauP FOREIGN KEY (id_grauP) REFERENCES grauProfessor(id);
+
+CREATE table list_salaDeAula(
+id int(4)auto_increment,
+frequencia_aluno varchar(1),
+nota int(3),
+id_periodo int(4),
+id_aluno int(4),
+id_disciplina int(4),
+id_professor int(4),
+primary key (id),
+foreign key (id_periodo) references periodo(id),
+foreign key (id_aluno) references aluno(id),
+foreign key (id_disciplina) references disciplina(id),
+foreign key (id_professor) references professor(id)
+);
+
+alter table aluno_list_turma  
+drop column id_aluno,
+drop constraint aluno_list_turma_ibfk_1,
+add column id_salaDeAula int(4),
+add constraint fk_id_salaDeAula foreign key (id_salaDeAula) references list_salaDeAula(id)
+;
+
+alter table lista_materia_curso  
+drop column id_materia,
+drop constraint lista_materia_curso_ibfk_1,
+add column id_salaDeAula int(4),
+add constraint fk_id_salaDeAula2 foreign key (id_salaDeAula) references list_salaDeAula(id)
+;
+
+rename table lista_materia_curso to list_cursoSDA,
+aluno_list_turma to list_turmaSDA;
+
+CREATE table list_cursoCampus(
+id int(4) auto_increment,
+id_campus int(4),
+id_curso int(4),
+primary key (id),
+foreign key (id_campus) references campus(id),
+foreign key (id_curso) references curso(id)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
