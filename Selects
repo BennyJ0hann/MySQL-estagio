@@ -9,6 +9,12 @@ WHERE dt_nascimento > '2000-01-01';
 
 SELECT * from estagiario_homol.aluno2000;
 
+
+
+
+
+
+
 #criando nome do campus apartir da concatenação
 CREATE view nomeCampus as
 SELECT 
@@ -22,6 +28,10 @@ WHERE UPPER(c2.nome_curso) = 'JOGADOR DE FUTEBOL';
 SELECT * FROM estagiario_homol.nomeCampus;
 
 
+
+
+
+
 #quantos cursos de jogador de futebol existem em cada cidade
 CREATE view Qtde_cursoJFPorCidade as
 SELECT 	
@@ -33,6 +43,15 @@ WHERE c2.id = 4
 group by c.cidade;
 
 SELECT * FROM estagiario_homol.Qtde_cursoJFPorCidade;
+
+
+
+
+
+
+
+
+
 
 
 #quantos cursos de jogador de futebol existem no Brasil
@@ -55,6 +74,13 @@ group by 1;
 SELECT * FROM estagiario_homol.Qtde_cursoJFBrasil;
 
 
+
+
+
+
+
+
+
 #quais cidades posuem o curso de jogador de futebol inferior a 5
 SELECT 	
 	c.cidade,
@@ -64,6 +90,213 @@ left join estagiario_homol.curso c2 on c.id_curso = c2.id
 WHERE c2.id = 4
 group by c.cidade
 HAVING numero_de_cursos < 5;
+
+
+
+
+
+
+
+#Faça uma View que mostre de forma analítica: Mostrar somente os
+#alunos que estão numa sala de Aula. Retorno: Nome do aluno, Campus,
+#Curso, Disciplina,Sala de Aula, Professor 
+
+CREATE view alunos_sda as
+SELECT 
+    a.nome_aluno,
+    CONCAT(RIGHT(TRIM(c3.cidade),2),c3.id)nome_campus,
+    c2.nome_curso,
+    d.nome_disciplina,
+    lsda.id,
+    p.nome_professor 
+FROM estagiario_homol.aluno a 
+inner JOIN list_salaDeAula lsda ON a.id = lsda.id_aluno
+INNER JOIN disciplina d ON lsda.id_disciplina = d.id 
+INNER JOIN professor p ON lsda.id_professor = p.id
+INNER JOIN list_cursoSDA lcs ON lsda.id = lcs.id_salaDeAula 
+INNER JOIN curso c2 ON lcs.id_curso = c2.id 
+INNER JOIN campus c3 ON c2.id = c3.id_curso 
+;
+
+SELECT * FROM estagiario_homol.alunos_sda;
+
+
+
+
+
+#Crie uma View que faça a contagem de alunos por Sexo.
+
+create view contagem_FeM as 
+SELECT 
+    COUNT(CASE WHEN a.sexo = 'M' THEN sexo END) AS numero_de_homens,
+    COUNT(CASE WHEN a.sexo = 'F' THEN sexo END) AS numero_de_mulheres
+FROM estagiario_homol.aluno a;
+
+SELECT * FROM estagiario_homol.contagem_FeM;
+
+
+
+
+
+
+
+
+#Crie uma View que mostre apenas os alunos que possuem menos de 50 anos.
+
+SELECT
+	a.nome_aluno ,
+	a.dt_nascimento 
+FROM estagiario_homol.aluno a 
+WHERE DATE_SUB(CURRENT_DATE(), INTERVAL 50 YEAR) < a.dt_nascimento
+;
+
+CREATE view alunos_menosDe50anos as
+SELECT
+	a.nome_aluno ,
+	YEAR(CURRENT_DATE()) - YEAR(a.dt_nascimento) - (RIGHT(CURRENT_DATE(), 5) < RIGHT(a.dt_nascimento, 5)) AS idade_atual 
+FROM estagiario_homol.aluno a 
+WHERE DATE_SUB(CURRENT_DATE(), INTERVAL 50 YEAR) < a.dt_nascimento
+;
+
+SELECT * FROM alunos_menosDe50anos;
+
+
+
+
+
+
+#Faça uma View que: Mostre o Nome de todos os alunos e professores de uma turma.
+#É necessário ter: Nome da Pessoa, Nome da Turma, Identificação se é Professor ou
+#é Aluno. Dica: Conceitos de Join e Case ou IF
+#create view nome_turma_identificacao as
+SELECT 
+	nome_pessoa,
+	nome_turma,
+	TIPO
+	
+FROM(
+	SELECT t.nome_turma,p.nome_professor AS nome_pessoa,'PROFESSOR' AS TIPO 
+	FROM professor p, turma t
+	inner JOIN list_turmaSDA lts ON t.id = lts.id_turma
+	inner JOIN list_salaDeAula lsda ON lsda.id = lts.id_salaDeAula
+	inner JOIN professor p2 ON p2.id = lsda.id_professor
+	UNION
+	SELECT t.nome_turma,a.nome_aluno AS nome_pessoa, 'ALUNO' AS TIPO2 
+	FROM aluno a, turma t
+	inner JOIN list_turmaSDA lts ON t.id = lts.id_turma
+	inner JOIN list_salaDeAula lsda ON lsda.id = lts.id_salaDeAula
+	inner JOIN aluno a2 ON a2.id = lsda.id_aluno) as tabela;
+
+
+
+SELECT * from nome_turma_identificacao;
+
+
+
+
+
+
+#View: Qual o numero de alunos total dos cursos de Tiktoker e Mecânico de Uber.
+#Retorno: Nome do Curso e O numero total de alunos
+#create view alunos_cursando as
+SELECT 
+	c.nome_curso ,
+	COUNT(a.nome_aluno) as total_de_alunos 
+FROM  estagiario_homol.curso c
+inner join list_cursoSDA lcs on lcs.id_curso = c.id 
+inner join list_salaDeAula lsda on lsda.id = lcs.id_salaDeAula 
+inner join aluno a on a.id = lsda.id_aluno 
+inner join list_turmaSDA lts on lts.id_salaDeAula  =  lsda.id 
+INNER join turma t on t.id = lts.id_turma 
+where UPPER(c.nome_curso) in ('TIKTOKER', 'MECÂNICO DE UBER')
+GROUP by c.nome_curso;
+
+SELECT * FROM alunos_cursando;
+
+SELECT 
+	c.nome_curso ,
+	a.nome_aluno
+FROM  estagiario_homol.curso c
+inner join list_cursoSDA lcs on lcs.id_curso = c.id 
+inner join list_salaDeAula lsda on lsda.id = lcs.id_salaDeAula 
+inner join aluno a on a.id = lsda.id_aluno;
+
+
+
+#View: Qual a soma de Folha salarial de um campus.
+#Retorno: Nome do Campus e o valor Total
+create view folha_salarial_UFMG as
+SELECT 
+	f.nome_faculdade as nome_campus,
+	SUM(s.salario) as folha_salarial_campus
+FROM estagiario_homol.faculdade f
+inner join campus c on c.id_faculdade = f.id
+inner join funcionario f2 on f2.id_campus = c.id
+inner join salario s on s.id = f2.id_salario
+GROUP BY f.nome_faculdade ;
+
+SELECT * FROM folha_salarial_UFMG;
+
+
+
+#Faça uma View que mostre Somente as disciplinas que terminam com a sigla 
+#'logia' e que tem menos de 120h. Retorno:Nome da Disciplina e Carga horária
+create view dspl_menor_120h as
+SELECT
+	d.nome_disciplina ,
+	d.horas as carga_horaria
+FROM estagiario_homol.disciplina d
+where nome_disciplina like '%logia' and horas < 120;
+
+SELECT * FROM dspl_menor_120h;
+
+
+#Crie uma coluna de Data chamada created_at nos campos de aluno e Professor.
+#Esse campo deve ser preenchido com a hora que o registro foi inserido na tabela
+#do banco de dados.Dica: Procure sobre Triggers
+
+ALTER table aluno
+modify column created_at DATETIME;
+
+ALTER table professor 
+modify column created_at DATETIME;
+
+
+CREATE TRIGGER after_pessoa_insert
+BEFORE INSERT ON estagiario_homol.aluno
+FOR EACH ROW
+BEGIN
+	SET NEW.created_at = NOW();
+END
+
+CREATE TRIGGER after_professor_insert
+BEFORE INSERT ON estagiario_homol.professor 
+FOR EACH ROW
+BEGIN
+	SET NEW.created_at = NOW();
+END
+
+
+DROP TRIGGER after_pessoa_insert;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
